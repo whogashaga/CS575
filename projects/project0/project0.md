@@ -28,3 +28,7 @@ and
   - What was your 1-thread-to-4-thread speedup?
   - Your 1-thread-to-4-thread speedup should be less than 4.0. Why do you think it is this way?
   - What was your Parallel Fraction, Fp? (Hint: it should be less than 1.0, but not much less.)
+
+------------------------------------------------------
+
+`bash run_project0.bash`
