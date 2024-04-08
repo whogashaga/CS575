@@ -5,3 +5,4 @@
 3. finish the equations for ***`vx`***, ***`t`***, and ***`dx`*** in the provided code.
 4. using the command line `bash loop.bash >& proj01.csv` <br>
    `>&` means take all standard output and all standard error and put it to `proj01.csv`
+5. **Computing Parallel Fraction with the biggest number of trials and 8 threads.**
