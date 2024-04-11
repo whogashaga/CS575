@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
             float vx = sqrt(2. * GRAVITY * (beforey - aftery));
             float t = sqrt(2. * aftery / GRAVITY);
             float dx = vx * t;
-            if (fabs(dx - distx) <= RADIUS)
+            if (fabs(dx - distx) <= RADIUS) // distance should be absolute value
                 numSuccesses++;
 
         } // for( # of  monte carlo trials )
