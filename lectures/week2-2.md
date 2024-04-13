@@ -11,7 +11,11 @@
 
 ### funcitonal.decomposition.pptx
   1. **Strats from page 6, highly related to Project2**
-  2. Page 10, cannot use ` #pragma omp barrier` because those threads are not in the same memory
+  2. Page 10: We cannot use ` #pragma omp barrier` because those threads are not in the same memory
+     - Starts from Lecture Video at *10:15*
+     - OpenMP spec only allows the first way to implement a barrier. (***Make a thread wait at a specific address in the code. Keep waiting until all threads are waiting there.***)
+     - So we have to implement the second one "**Wait**" which we are using.
+     
 
 ### twoassemblycodes.pptx
   1. play with some bugs in the function **WaitBarrier()**
