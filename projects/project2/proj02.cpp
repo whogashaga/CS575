@@ -14,7 +14,8 @@ int	NowMonth = 0;		// 0 - 11
 float NowPrecip;		// inches of rain per month
 float NowTemp;          // fahrenheit temperature this month
 float NowHeight  = 5.;	// grain height in inches
-int NowNumDeer   = 2;	// number of deer in the current population
+int NowNumDeer   = 5;	// number of deer in the current population
+int NowNumCougar = 2;   // number of cougar in the current population
 
 const float GRAIN_GROWS_PER_MONTH   = 12.0;
 const float ONE_DEER_EATS_PER_MONTH = 1.0;
@@ -105,8 +106,9 @@ void Watcher()
             NowPrecip = 0.;
         float precipCm = (NowPrecip < 0.) ? 0. : (NowPrecip * 2.54);
 
-        fprintf(stderr, "%2d, %d - Temp: %5.2lf °C, Precip: %5.2lf cm | Grain: %6.2lf cm, Deers: %2d\n",
-                NowMonth, NowYear, centigrade, precipCm, NowHeight*2.54, NowNumDeer);
+        // fprintf(stderr, "%2d/%d: ", NowMonth+1, NowYear);
+        fprintf(stderr, "%5.2lf , %5.2lf , %2d , %6.2lf, %2d\n", centigrade, precipCm, NowNumDeer, NowHeight * 2.54, NowNumCougar);
+        // fprintf(stderr, " Temp: %5.2lf °C, Precip: %5.2lf cm, Deers: %2d, Grain: %6.2lf cm\n", centigrade, precipCm, NowNumDeer, NowHeight * 2.54);
 
         if (NowMonth < 11) {
             NowMonth++;
@@ -128,7 +130,7 @@ void Deer()
         // compute a temporary next-value for this quantity
         // based on the current state of the simulation:
         int nextNumDeer = NowNumDeer;
-        int carryingCapacity = (int)(NowHeight);
+        int carryingCapacity = (int)(NowHeight) - NowNumCougar;
         if (nextNumDeer < carryingCapacity)
             nextNumDeer++;
         else if (nextNumDeer > carryingCapacity)
@@ -171,16 +173,23 @@ void Grain()
     }
 }
 
-void MyAgent()
+// Deer's predator
+void Cougar()
 {
     while (NowYear < 2030)
     {
         // compute a temporary next-value for this quantity
         // based on the current state of the simulation:
-
+        int nextNumCougar = NowNumCougar;
+        int carryingCapacity = (int)(NowPrecip);
+        if (carryingCapacity > 7 && (NowNumDeer > nextNumCougar+1))
+            nextNumCougar++;
+        else
+            nextNumCougar--;
         // DoneComputing barrier:
         WaitBarrier();
-
+        
+        NowNumCougar = (nextNumCougar < 0) ? 0 : nextNumCougar;
         // DoneAssigning barrier:
         WaitBarrier();
 
@@ -222,7 +231,7 @@ int main(int argc, char *argv[])
 
         #pragma omp section
         {
-            MyAgent(); // your own
+            Cougar(); // your own
         }
     } // implied barrier -- all functions must return in order
       // to allow any of them to get past here
