@@ -6,3 +6,4 @@
 3. Page 49: Fix#1 NUMPAD.15 PADs are quite a wasting memory.
 4. Page 50: Fix#2 Using local(private) variables.
 5. Page 53: **If the bottom 6 bits of a memory address are all zero, that tell you that it's the start of the cache line.**
+6. `error: ‘default’ is not valid for ‘#pragma omp single’`
