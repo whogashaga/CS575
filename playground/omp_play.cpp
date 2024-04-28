@@ -17,16 +17,18 @@ int main(int argc, char* argv[])
     #endif
 
     omp_set_num_threads( 2 );
-    #pragma omp parallel
+    #pragma omp parallel default(none)
     {
         #pragma omp single
         {
             #pragma omp task
                 printf("A\n" );
-            #pragma omp taskwait
+            
+            #pragma omp taskwait    // taskwait for the execution order.
 
             #pragma omp task
                 printf("B\n" );
+            
             #pragma omp taskwait
         }
         
