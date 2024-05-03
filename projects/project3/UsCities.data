@@ -52,7 +52,7 @@ struct city Cities[ ] =
 	{  "Wichita,KS" , 97.35 , 37.69  },
 	{  "Arlington,TX" , 97.12 , 32.70  },
 	{  "Aurora,CO" , 104.72 , 39.70  },
-	{  "NewOrleans,LA" , 89.93 , 30.05  },
+	{  "NewOrleans],LA" , 89.93 , 30.05  },
 	{  "Cleveland,OH" , 81.68 , 41.48  },
 	{  "Anaheim,CA" , 117.76 , 33.86  },
 	{  "Henderson,NV" , 115.04 , 36.01  },

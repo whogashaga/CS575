@@ -1,6 +1,7 @@
 ## A Real Application Parallel Challenge<br>100 Points<br>Due: May 8
 
-
+### Hint:
+1. K is the number of groups.
 
 ### Commentary:
 1. Tell what machine you ran this on
