@@ -5,6 +5,7 @@
 #include <time.h>
 #include <omp.h>
 #include <string>
+using namespace std;
 
 // setting the number of threads:
 #ifndef NUMT
@@ -19,6 +20,7 @@
 
 // maximum iterations to allow looking for convergence:
 #define MAXITERATIONS	100
+// #define MAXITERATIONS 1
 
 // how many tries to discover the maximum performance:
 #define NUMTIMES	20
@@ -31,7 +33,6 @@ struct city
 	float		longitude;
 	float		latitude;
 	int		capitalnumber;
-	int		prevcapitalnumber;
 	float		mindistance;
 };
 
@@ -40,7 +41,7 @@ struct city
 // setting the number of cities we want to try:
 #define NUMCITIES 	( sizeof(Cities) / sizeof(struct city) )
 
-
+// define object 'capital'
 struct capital
 {
 	std::string	name;
@@ -51,7 +52,7 @@ struct capital
 	int		numsum;
 };
 
-
+// declare object array of 'capital' with size NUMCAPITALS
 struct capital	Capitals[NUMCAPITALS];
 
 
@@ -67,20 +68,20 @@ Distance( int city, int capital )
 int
 main( int argc, char *argv[ ] )
 {
-#ifdef _OPENMP
-	fprintf( stderr, "OpenMP is supported -- version = %d\n", _OPENMP );
-#else
-        fprintf( stderr, "No OpenMP support!\n" );
-        return 1;
-#endif
+	// #ifdef _OPENMP
+	// 	fprintf( stderr, "OpenMP is supported -- version = %d\n", _OPENMP );
+	// #else
+	//         fprintf( stderr, "No OpenMP support!\n" );
+	//         return 1;
+	// #endif
 
 	// make sure we have the data correctly:
-	//for( int i = 0; i < NUMCITIES; i++ )
-	//{
-		//fprintf( stderr, "%3d  %8.2f  %8.2f  %s\n", i, Cities[i].longitude, Cities[i].latitude, Cities[i].name.c_str() );
-	//}
+	// for( int i = 0; i < NUMCITIES; i++ )
+	// {
+	// 	fprintf( stderr, "%3d  %8.2f  %8.2f  %s\n", i, Cities[i].longitude, Cities[i].latitude, Cities[i].name.c_str() );
+	// }
 
-        omp_set_num_threads( NUMT );    // set the number of threads to use in parallelizing the for-loop:`
+	omp_set_num_threads(NUMT); // set the number of threads to use in parallelizing the for-loop:`
 
 	// seed the capitals:
 	// (this is just picking initial capital cities at uniform intervals)
@@ -89,6 +90,7 @@ main( int argc, char *argv[ ] )
 		int cityIndex = k * (NUMCITIES-1) / (NUMCAPITALS-1);
 		Capitals[k].longitude = Cities[cityIndex].longitude;
 		Capitals[k].latitude  = Cities[cityIndex].latitude;
+		// fprintf(stderr, "%d. longitude: %f, latitude: %f\n", k, Capitals[k].name.c_str(), Capitals[k].longitude, Capitals[k].latitude);
 	}
 
 	double time0, time1;
@@ -105,38 +107,43 @@ main( int argc, char *argv[ ] )
 		time0 = omp_get_wtime( );
 
         	// the #pragma goes here -- you figure out what it needs to look like:
+		#pragma omp parallel for default(none), shared(Capitals, Cities)
 		for( int i = 0; i < NUMCITIES; i++ )
 		{
 			int capitalnumber = -1;
 			float mindistance = 1.e+37;
-
+			// fprintf(stderr, "= = = = %d. Distance Calculation = = = =\n", i);
 			for( int k = 0; k < NUMCAPITALS; k++ )
 			{
 				float dist = Distance( i, k );
+				// fprintf(stderr, "dist: %f\n", dist);
 				if( dist < mindistance )
 				{
-					?????
-					?????
+					mindistance = dist;
+					Cities[i].mindistance = dist;
+					Cities[i].capitalnumber = k;
 				}
 			}
 
-			int k = Cities[i].capitalnumber;
+			int capitalNum = Cities[i].capitalnumber;
+			// fprintf(stderr, "~ ~ ~ ~ ~CapitalNumber: %d\n", i, capitalNum);
 			// this is here for the same reason as the Trapezoid noteset uses it:
 			#pragma omp critical
 			{
-				Capitals[k].longsum += Cities[i].longitude;
-				Capitals[k].latsum  += Cities[i].latitude;
-				Capitals[k].numsum++;
+				Capitals[capitalNum].longsum += Cities[i].longitude;
+				Capitals[capitalNum].latsum += Cities[i].latitude;
+				Capitals[capitalNum].numsum++;
 			}
 		}
 		time1 = omp_get_wtime( );
 
-
+		// fprintf(stderr, "\n = = = = Averaging Long and Lat = = = = \n");
 		// get the average longitude and latitude for each capital:
 		for( int k = 0; k < NUMCAPITALS; k++ )
 		{
-			Capitals[k].longitude = ?????
-			Capitals[k].latitude  = ?????
+			Capitals[k].longitude = Capitals[k].longsum / Capitals[k].numsum;
+			Capitals[k].latitude = Capitals[k].latsum / Capitals[k].numsum;
+			// fprintf(stderr, "Centroid %d. longitude: %f, latitude: %f\n", k, Capitals[k].longitude, Capitals[k].latitude);
 		}
 	}
 
@@ -147,9 +154,8 @@ main( int argc, char *argv[ ] )
 	// this is the extra credit:
 	for( int k = 0; k < NUMCAPITALS; k++ )
 	{
-		?????
+		// fprintf(stderr, "%d. closest: %s\n", k, Capitals[k].closestCity.c_str());
 	}
-
 
 	// print the longitude-latitude of each new capital city:
 	// you only need to do this once per some number of NUMCAPITALS -- do it for the 1-thread version:
@@ -157,17 +163,16 @@ main( int argc, char *argv[ ] )
 	{
 		for( int k = 0; k < NUMCAPITALS; k++ )
 		{
-			fprintf( stderr, "\t%3d:  %8.2f , %8.2f\n", k, Capitals[k].longitude, Capitals[k].latitude );
+			// fprintf( stderr, "\t%3d:  %8.2f , %8.2f\n", k, Capitals[k].longitude, Capitals[k].latitude );
 
 			//if you did the extra credit, use this fprintf instead:
 			//fprintf( stderr, "\t%3d:  %8.2f , %8.2f , %s\n", k, Capitals[k].longitude, Capitals[k].latitude, Capitals[k].name.c_str() );
 		}
 	}
 #ifdef CSV
-        fprintf(stderr, "%2d , %4d , %4d , %8.3lf:\n", NUMT, NUMCITIES, NUMCAPITALS, megaCityCapitalsPerSecond );
+        fprintf(stderr, "%2d , %4d , %4d , %8.3lf\n", NUMT, NUMCITIES, NUMCAPITALS, megaCityCapitalsPerSecond );
 #else
         fprintf(stderr, "%2d threads : %4d cities ; %4d capitals; megatrials/sec = %8.3lf\n",
                 NUMT, NUMCITIES, NUMCAPITALS, megaCityCapitalsPerSecond );
 #endif
-
-}
+	}

@@ -2,6 +2,8 @@
 
 ### Hint:
 1. K is the number of groups.
+2. Using the command line `bash loop.bash >& proj03.csv` <br>
+   `>&` means take all standard output and all standard error and put it to `proj03.csv`
 
 ### Commentary:
 1. Tell what machine you ran this on
