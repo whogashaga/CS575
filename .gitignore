@@ -5,3 +5,5 @@
 *Quiz*
 *ScpCmdLine*
 *.docx*
+*.vscode/*
+*.vscode/settings.json
