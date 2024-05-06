@@ -9,7 +9,7 @@ using namespace std;
 
 // setting the number of threads:
 #ifndef NUMT
-#define NUMT		    2
+#define NUMT		    1
 #endif
 
 // setting the number of capitals we want to try:
@@ -20,7 +20,6 @@ using namespace std;
 
 // maximum iterations to allow looking for convergence:
 #define MAXITERATIONS	100
-// #define MAXITERATIONS 1
 
 // how many tries to discover the maximum performance:
 #define NUMTIMES	20
@@ -161,16 +160,26 @@ main( int argc, char *argv[ ] )
 	// you only need to do this once per some number of NUMCAPITALS -- do it for the 1-thread version:
 	if( NUMT == 1 )
 	{
+		fprintf( stderr, "For NUMCAPITALS: %d\n", NUMCAPITALS);
 		for( int k = 0; k < NUMCAPITALS; k++ )
 		{
-			// fprintf( stderr, "\t%3d:  %8.2f , %8.2f\n", k, Capitals[k].longitude, Capitals[k].latitude );
-
+			float dist = 1.e+37;
+			for (int i = 0; i < NUMCITIES; i++)
+			{
+				int capitalNum = Cities[i].capitalnumber;
+				float minDis = Cities[i].mindistance;
+				if (capitalNum == k && minDis < dist)
+				{
+					dist = minDis;
+					Capitals[k].name = Cities[i].name;
+				}
+			}
 			//if you did the extra credit, use this fprintf instead:
-			//fprintf( stderr, "\t%3d:  %8.2f , %8.2f , %s\n", k, Capitals[k].longitude, Capitals[k].latitude, Capitals[k].name.c_str() );
+			fprintf( stderr, "\t%3d:  %8.2f , %8.2f , %s\n", k, Capitals[k].longitude, Capitals[k].latitude, Capitals[k].name.c_str() );
 		}
 	}
 #ifdef CSV
-        fprintf(stderr, "%2d , %4d , %4d , %8.3lf\n", NUMT, NUMCITIES, NUMCAPITALS, megaCityCapitalsPerSecond );
+        // fprintf(stderr, "%2d , %4d , %4d , %8.3lf\n", NUMT, NUMCITIES, NUMCAPITALS, megaCityCapitalsPerSecond );
 #else
         fprintf(stderr, "%2d threads : %4d cities ; %4d capitals; megatrials/sec = %8.3lf\n",
                 NUMT, NUMCITIES, NUMCAPITALS, megaCityCapitalsPerSecond );
