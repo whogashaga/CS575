@@ -113,13 +113,23 @@ main( int argc, char *argv[ ] )
 void
 NonSimdMul( float *A, float *B, float *C, int n )
 {
-	?????
+	for (int i = 0; i < n; i++)
+	{
+		C[i] = A[i] * B[i];
+	}
 }
 
 float
 NonSimdMulSum( float *A, float *B, int n )
 {
-	?????
+	float sum = 0.;
+
+	for (int i = 0; i < n; i++)
+	{
+		sum += A[i] * B[i];
+	}
+
+	return sum;
 }
 
 
