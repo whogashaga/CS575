@@ -9,7 +9,7 @@
 ### simd.vector.pptx
 1. P.3: Intel SSE allows your program to perform 4 floating point multiplies in one instruction.
 2. P.9: One way to get a better speedup is to use assembly language.
-3. 
+3. P.15: Intel Intrinsic is basically writing Assembly code but not looking like Assembly code.
 
 ### prefetching.pptx
 1. There is no universal standard for how to ask for prefetch. It is complier-specific.
