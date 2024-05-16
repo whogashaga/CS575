@@ -12,6 +12,10 @@
 #define SSE_WIDTH	4
 #define ALIGNED		__attribute__((aligned(16)))
 
+// setting the number of threads:
+#ifndef NUMT
+#define NUMT		    4
+#endif
 
 #define NUMTRIES	100
 
@@ -33,6 +37,8 @@ float	NonSimdMulSum( float *, float *, int );
 int
 main( int argc, char *argv[ ] )
 {
+	omp_set_num_threads(NUMT);
+
 	for( int i = 0; i < ARRAYSIZE; i++ )
 	{
 		A[i] = sqrtf( (float)(i+1) );
@@ -89,17 +95,18 @@ main( int argc, char *argv[ ] )
 	mmn = megaMultAdds;
 
 
-	maxPerformance = 0.;
+	double maxPerformanceMultiCores = 0.;
+	#pragma omp parallel for default(none), shared(A, B, C) private(sums) reduction(max:maxPerformanceMultiCores)
 	for( int t = 0; t < NUMTRIES; t++ )
 	{
 		double time0 = omp_get_wtime( );
 		sums = SimdMulSum( A, B, ARRAYSIZE );
 		double time1 = omp_get_wtime( );
 		double perf = (double)ARRAYSIZE / (time1 - time0);
-		if( perf > maxPerformance )
-			maxPerformance = perf;
+		if( perf > maxPerformanceMultiCores )
+			maxPerformanceMultiCores = perf;
 	}
-	megaMultAdds = maxPerformance / 1000000.;
+	megaMultAdds = maxPerformanceMultiCores / 1000000.;
 	fprintf( stderr, "%10.2lf\t,", megaMultAdds );
 	mms = megaMultAdds;
 	speedup = mms/mmn;
