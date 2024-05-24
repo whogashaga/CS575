@@ -154,10 +154,10 @@ main( int argc, char *argv[ ] )
 
 	cl_mem dX     = clCreateBuffer( Context, CL_MEM_READ_ONLY,  xySize, NULL, &status );
 	cl_mem dY     = clCreateBuffer( Context, CL_MEM_READ_ONLY,  xySize, NULL, &status );
-	cl_mem dSumx2 = clCreateBuffer( Context, CL_MEM_READ_ONLY,  xySize, NULL, &status );
-	cl_mem dSumx  = clCreateBuffer( Context, CL_MEM_READ_ONLY,  xySize, NULL, &status );
-	cl_mem dSumxy = clCreateBuffer( Context, CL_MEM_READ_ONLY,  xySize, NULL, &status );
-	cl_mem dSumy  = clCreateBuffer( Context, CL_MEM_READ_ONLY,  xySize, NULL, &status );
+	cl_mem dSumx2 = clCreateBuffer( Context, CL_MEM_WRITE_ONLY,  xySize, NULL, &status );
+	cl_mem dSumx = clCreateBuffer(Context, CL_MEM_WRITE_ONLY, xySize, NULL, &status);
+	cl_mem dSumxy = clCreateBuffer(Context, CL_MEM_WRITE_ONLY, xySize, NULL, &status);
+	cl_mem dSumy = clCreateBuffer(Context, CL_MEM_WRITE_ONLY, xySize, NULL, &status);
 
 	if( status != CL_SUCCESS )
 		fprintf( stderr, "clCreateBuffer failed\n" );
@@ -222,13 +222,13 @@ main( int argc, char *argv[ ] )
 
 	// 10. setup the arguments to the kernel object:
 
-	status = clSetKernelArg( Kernel, 0, sizeof(cl_mem), dX );
-	status = clSetKernelArg( Kernel, 1, sizeof(cl_mem), dY );
+	status = clSetKernelArg( Kernel, 0, sizeof(cl_mem), &dX );
+	status = clSetKernelArg( Kernel, 1, sizeof(cl_mem), &dY );
 
-	status = clSetKernelArg( Kernel, 2, sizeof(cl_mem), dSumx2 );
-	status = clSetKernelArg( Kernel, 3, sizeof(cl_mem), dSumx );
-	status = clSetKernelArg( Kernel, 4, sizeof(cl_mem), dSumxy );
-	status = clSetKernelArg( Kernel, 5, sizeof(cl_mem), dSumy );
+	status = clSetKernelArg( Kernel, 2, sizeof(cl_mem), &dSumx2 );
+	status = clSetKernelArg( Kernel, 3, sizeof(cl_mem), &dSumx );
+	status = clSetKernelArg( Kernel, 4, sizeof(cl_mem), &dSumxy );
+	status = clSetKernelArg( Kernel, 5, sizeof(cl_mem), &dSumy );
 
 	// 11. enqueue the kernel object for execution:
 
@@ -263,10 +263,10 @@ main( int argc, char *argv[ ] )
 
 	for( int i = 0; i < DATASIZE; i++ )
 	{
-		sumx  += sumx;
-		sumx2 += sumx2;
-		sumy  += sumy;
-		sumxy += sumxy;
+		sumx  += hSumx[i];
+		sumx2 += hSumx2[i];
+		sumy  += hSumy[i];
+		sumxy += hSumxy[i];
 	}
 
 	float m, b;
