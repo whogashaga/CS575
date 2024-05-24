@@ -165,11 +165,11 @@ main( int argc, char *argv[ ] )
 
 	// 6. enqueue the 2 commands to write the data from the host buffers to the device buffers:
 
-	status = clEnqueueWriteBuffer( CmdQueue, ??, CL_FALSE, 0, ??????, ??, 0, NULL, NULL );
+	status = clEnqueueWriteBuffer( CmdQueue, dX, CL_FALSE, 0, xySize, hX, 0, NULL, NULL );
 	if( status != CL_SUCCESS )
 		fprintf( stderr, "clEnqueueWriteBuffer failed (1)\n" );
 
-	status = clEnqueueWriteBuffer( CmdQueue, ??, CL_FALSE, 0, ??????, ??, 0, NULL, NULL );
+	status = clEnqueueWriteBuffer(CmdQueue, dY, CL_FALSE, 0, xySize, hY, 0, NULL, NULL);
 	if( status != CL_SUCCESS )
 		fprintf( stderr, "clEnqueueWriteBuffer failed (2)\n" );
 
@@ -222,13 +222,13 @@ main( int argc, char *argv[ ] )
 
 	// 10. setup the arguments to the kernel object:
 
-	status = clSetKernelArg( Kernel, 0, sizeof(cl_mem), ?????? );
-	status = clSetKernelArg( Kernel, 1, sizeof(cl_mem), ?????? );
+	status = clSetKernelArg( Kernel, 0, sizeof(cl_mem), dX );
+	status = clSetKernelArg( Kernel, 1, sizeof(cl_mem), dY );
 
-	status = clSetKernelArg( Kernel, 2, sizeof(cl_mem), ?????? );
-	status = clSetKernelArg( Kernel, 3, sizeof(cl_mem), ?????? );
-	status = clSetKernelArg( Kernel, 4, sizeof(cl_mem), ?????? );
-	status = clSetKernelArg( Kernel, 5, sizeof(cl_mem), ?????? );
+	status = clSetKernelArg( Kernel, 2, sizeof(cl_mem), dSumx2 );
+	status = clSetKernelArg( Kernel, 3, sizeof(cl_mem), dSumx );
+	status = clSetKernelArg( Kernel, 4, sizeof(cl_mem), dSumxy );
+	status = clSetKernelArg( Kernel, 5, sizeof(cl_mem), dSumy );
 
 	// 11. enqueue the kernel object for execution:
 
@@ -249,10 +249,10 @@ main( int argc, char *argv[ ] )
 
 	// 12. read the results buffer back from the device to the host:
 
-	status = clEnqueueReadBuffer( CmdQueue, ??????, CL_FALSE, 0, xySize, ??????, 0, NULL, NULL );
-	status = clEnqueueReadBuffer( CmdQueue, ??????, CL_FALSE, 0, xySize, ?????? , 0, NULL, NULL );
-	status = clEnqueueReadBuffer( CmdQueue, ??????, CL_FALSE, 0, xySize, ?????? , 0, NULL, NULL );
-	status = clEnqueueReadBuffer( CmdQueue, ??????, CL_FALSE, 0, xySize, ?????? , 0, NULL, NULL );
+	status = clEnqueueReadBuffer( CmdQueue, dSumx2, CL_FALSE, 0, xySize, hSumx2 , 0, NULL, NULL );
+	status = clEnqueueReadBuffer( CmdQueue, dSumx, CL_FALSE, 0, xySize, hSumx , 0, NULL, NULL );
+	status = clEnqueueReadBuffer( CmdQueue, dSumxy, CL_FALSE, 0, xySize, hSumxy , 0, NULL, NULL );
+	status = clEnqueueReadBuffer( CmdQueue, dSumy, CL_FALSE, 0, xySize, hSumy , 0, NULL, NULL );
 
 	Wait( CmdQueue );
 
@@ -263,10 +263,10 @@ main( int argc, char *argv[ ] )
 
 	for( int i = 0; i < DATASIZE; i++ )
 	{
-		sumx  += ?????
-		sumx2 += ?????
-		sumy  += ?????
-		sumxy += ?????
+		sumx  += sumx;
+		sumx2 += sumx2;
+		sumy  += sumy;
+		sumxy += sumxy;
 	}
 
 	float m, b;
