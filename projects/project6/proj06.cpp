@@ -271,7 +271,7 @@ main( int argc, char *argv[ ] )
 
 	float m, b;
 	Solve( sumx2, sumx, sumx, (float)DATASIZE, sumxy, sumy,   &m, &b );
-	fprintf( stderr, "** m = %8.2f, b = %8.2f **\n", m, b );
+	// fprintf( stderr, "** m = %8.2f, b = %8.2f **\n", m, b );
 
 
 #ifdef CSV
@@ -423,8 +423,8 @@ SelectOpenclDevice()
 		fprintf(stderr, "I found no OpenCL devices!\n");
 		exit( 1 );
 	}
-	fprintf(stderr, "I have selected Platform #%d, Device #%d: ", bestPlatform, bestDevice);
-	fprintf(stderr, "Vendor = %s, Type = %s\n", Vendor(bestDeviceVendor), Type(bestDeviceType) );
+	// fprintf(stderr, "I have selected Platform #%d, Device #%d: ", bestPlatform, bestDevice);
+	// fprintf(stderr, "Vendor = %s, Type = %s\n", Vendor(bestDeviceVendor), Type(bestDeviceType) );
 }
 
 char *

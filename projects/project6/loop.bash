@@ -6,3 +6,5 @@ do
         ./proj06
     done
 done
+
+## bash loop.bash >& proj06.csv
