@@ -50,4 +50,6 @@
 
 20. Page 41: small dataset sizes reduce performance because there is a certain amount of overhead. And if you don't have enough data to keep it busy, it kind of levels out at a certain level of performance. Notice that going from 16 nodes to 32 doesn't double the performance. Almost Amdahl's law, not quite. Flattening out.
 
-21. 
+21. Page 45: MPI Reduction
+
+22. What if the array cannot be broken into equal pieces? That's why we cannot use `Scatter` and `Gather` on Project 7.
