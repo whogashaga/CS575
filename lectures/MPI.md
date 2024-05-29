@@ -31,9 +31,9 @@
 
 11. Page 23: There is a Transmission Buffer to store data until `MPI_Recv` is called. This is how it does not have to synchronize really.
 
-12. Page 24: A Better Example and more realistic way of MPI sending and receiving.
+12. Page 24: A Better Example and more realistic way of MPI sending and receiving. ***Corresponding to Project 7.***
 
-13. Page 25: Design Patterns: `Scatter`, `Gather`, and `Broadcast``.<br><br>
+13. Page 25: Design Patterns: `Scatter`, `Gather`, and `Broadcast`.<br>
    ***Scatter and Gather Usually Go Together.***
 
 14. Page 27: **MPI_Scatter()** is like broadcast. It's detailed descriptions.
