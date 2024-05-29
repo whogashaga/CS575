@@ -1,6 +1,6 @@
 ## Message Passing Interface (MPI)
 
-### mpi.pptx
+### [mpi.pptx](https://web.engr.oregonstate.edu/~mjb/cs575/Handouts/mpi.1pp.pdf)
 
 1. Basic Idea: Programs on different CPUs coordinate computations by passing messages between each other.
    <br> **Note**: Each MPI CPU must also have an integer ID assigned to it (called its ***rank***).
@@ -40,5 +40,14 @@
 
 15. Page 28: **MPI_Gather()**'s detailed descriptions.
 
-16. 
-     
+16. Page 30: The global variables that everybody has.
+
+17. Page 32: The realistic example for `MPI_Scatter()`
+
+18. Page 33: The realistic example for `MPI_Gather()`
+
+19. Page 35: **Have to do both left and right transmission.** In the image, *Processor#1* not only send the data of $T_i$ to $T_{i-1}$ in *Processor#0*, but also receive data from $T_{i-1}$ to $T_i$.
+
+20. Page 41: small dataset sizes reduce performance because there is a certain amount of overhead. And if you don't have enough data to keep it busy, it kind of levels out at a certain level of performance. Notice that going from 16 nodes to 32 doesn't double the performance. Almost Amdahl's law, not quite. Flattening out.
+
+21. 
