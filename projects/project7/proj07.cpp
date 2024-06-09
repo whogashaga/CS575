@@ -144,13 +144,13 @@ int main(int argc, char *argv[])
         {
             if (dst != THEBOSS)
             {
-                MPI_Send( &BigSignal[dst*PPSize], PPSize, MPI_FLOAT, dst, 2, MPT_COMM_WORLD );
+                MPI_Send( &BigSignal[dst*PPSize], PPSize, MPI_FLOAT, dst, 2, MPI_COMM_WORLD );
             }
         }
     }
     else
     {
-        MPI_Recv( PPSignal, PPSize, MPI_FLOAT, BOSS, 2, MPI_COMM_WORLD, &status );
+        MPI_Recv( PPSignal, PPSize, MPI_FLOAT, THEBOSS, 2, MPI_COMM_WORLD, &status );
     }
 
     // each processor does its own autocorrelation:
@@ -197,8 +197,9 @@ int main(int argc, char *argv[])
     {
         double seconds = time1 - time0;
         double performance = (double)MAXSHIFTS * (double)NUMELEMENTS / seconds / 1000000.; // mega-elements computed per second
-        fprintf(stderr, "%3d processors, %10d elements, %9.2lf mega-autocorrelations computed per second\n",
-                NumCpus, NUMELEMENTS, performance);
+        // fprintf(stderr, "%3d processors, %10d elements, %9.2lf mega-autocorrelations computed per second\n",
+        //         NumCpus, NUMELEMENTS, performance);
+        fprintf(stderr, "%3d , %10d , %9.2lf \n", NumCpus, NUMELEMENTS, performance);
     }
 
     // write the file to be plotted to look for the secret sine wave:
