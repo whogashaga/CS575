@@ -1,8 +1,6 @@
 *slides/*
 *test.csv
 *.nfs*
-*TopSecrets*
-*Quiz*
 *ScpCmdLine*
 *.docx*
 *.vscode/*
